@@ -37,6 +37,9 @@ const App = () => {
           <Route path='/sign-up'>
             <SignUp />
           </Route>
+          <Route path='/questionnaire-not-logged-in'>
+            <Questionnaire/>
+          </Route>
           <AuthRoute path='/questionnaire' component={Questionnaire} />
           <Route path='/learn'>
             <Learn />

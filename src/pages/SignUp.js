@@ -16,7 +16,7 @@ const SignUp = () => {
   const schoolRef = useRef();
 
   //pull the signup function from the Context using a hook we made
-  const { signup, registerUser } = useAuth();
+  const { signup, registerUser, tookQuizNotLoggedIn, notLoggedInTotal } = useAuth();
 
   //state to keep track of current error to display to the user
   const [error, setError] = useState('');
@@ -68,9 +68,16 @@ const SignUp = () => {
         lastNameRef.current.value,
         schoolRef.current.value
       );
-
-      //if the sign up is successful then we can redirect to the questionnaire
-      redirect.push('/questionnaire');
+      //if the user is trying to sign up normally
+      if(!tookQuizNotLoggedIn) {
+        //if the sign up is successful then we can redirect to the questionnaire
+        redirect.push('/questionnaire');
+      }
+      //if user took quiz then tried signing up we route back to success page to display their results again
+      if(tookQuizNotLoggedIn) {
+        //if the sign up is successful then we can redirect to the questionnaire
+        redirect.push(`/success/${notLoggedInTotal}`);
+      }
     } catch (e) {
       setError(e.message);
       setLoading(false);

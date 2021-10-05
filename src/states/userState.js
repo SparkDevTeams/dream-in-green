@@ -30,6 +30,11 @@ export function UserProvider({ children }) {
   //otherwise we render the log-in/sign-up page
   const [loading, setLoading] = useState(true);
 
+  //this state is used so that when a user that it's not logged in takes a quiz, the app will be able to route
+  //accordingly without losing score to be able to save it to profile after user either logs in or creates account
+  const [tookQuizNotLoggedIn, setTookQuizNotLoggedIn] = useState(false)
+  //quiz total score for user that is not logged in
+  const [notLoggedInTotal, setNotLoggedInTotal] = useState(0);
 
   //sign up through firebase api
   function signup(email, password) {
@@ -143,6 +148,10 @@ export function UserProvider({ children }) {
     registerUser,
     addScoreToDb,
     uploadProfilePic,
+    tookQuizNotLoggedIn,
+    setTookQuizNotLoggedIn,
+    notLoggedInTotal,
+    setNotLoggedInTotal
   };
 
   return (

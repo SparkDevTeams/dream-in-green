@@ -13,7 +13,7 @@ const Questionnaire = () => {
   const [score, setScore] = useState({});
   const [questions, setQuestions] = useState([]);
   let history = useHistory();
-  const { user, addScoreToDb } = useAuth();
+  const { user, addScoreToDb, setNotLoggedInTotal, notLoggedInTotal } = useAuth();
 
   //Grabs questions from firebase realtime database
   useEffect(() => {
@@ -30,12 +30,16 @@ const Questionnaire = () => {
       total += score[key];
     }
 
-    try {
-      await addScoreToDb(user.uid, total, new Date());
-    } catch (e) {
-      console.log(e);
+    if(user) {
+      try {
+        console.log(total)
+        await addScoreToDb(user.uid, total, new Date());
+      } catch (e) {
+        console.log(e);
+      }
     }
     history.push(`/success/${total}`);
+    setNotLoggedInTotal(total)
   };
 
   const handleSelect = (selectedIndex, e) => {

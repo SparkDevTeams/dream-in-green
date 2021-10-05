@@ -9,7 +9,7 @@ const LogIn = () => {
   //same logic as sign up except function called
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { login } = useAuth();
+  const { login, tookQuizNotLoggedIn, notLoggedInTotal} = useAuth();
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
   const redirect = useHistory();
@@ -25,7 +25,12 @@ const LogIn = () => {
       setError('');
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
-      redirect.push('/');
+      if (!tookQuizNotLoggedIn) {
+        redirect.push('/');
+      }
+      if (tookQuizNotLoggedIn) {
+        redirect.push(`/success/${notLoggedInTotal}`);
+      }
     } catch (e) {
       setError('Failed to sign in');
       setLoading(false);

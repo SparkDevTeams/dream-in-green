@@ -4,8 +4,10 @@ import InformationRow from '../components/InformationRow';
 import ContactUsForm from '../components/ContactUsForm';
 
 import homeImgFir from '../images/girl-earth.svg';
+import {useAuth} from "../states/userState";
 
 const Home = () => {
+  const {user} = useAuth();
   return (
     <div>
       <div className='container'>
@@ -22,12 +24,21 @@ const Home = () => {
               learn about their impact on the environment and how to create a
               better world.
             </p>
-            <Link
-              to='/questionnaire'
-              className='btn btn-primary my-2 my-lg-0 py-3 px-5'
+            {user && ( <Link
+                to='/questionnaire'
+                className='btn btn-primary my-2 my-lg-0 py-3 px-5'
             >
               Get Started
-            </Link>
+            </Link>)}
+            {!user && <Link
+                to='/questionnaire-not-logged-in'
+                className='btn btn-primary my-2 my-lg-0 py-3 px-5'
+            >
+              Take Your First Quiz*
+            </Link>}
+            {!user && <div className='font-weight-bold'>
+              *Will have opportunity at end of quiz, to create an account or login, to be able to track progress
+            </div>}
           </div>
           <div className='col-lg-6'>
             <div className='hero-img-right'>
