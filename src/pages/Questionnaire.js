@@ -13,14 +13,14 @@ const Questionnaire = () => {
   const [score, setScore] = useState({});
   const [questions, setQuestions] = useState([]);
   let history = useHistory();
-  const { user, addScoreToDb, setNotLoggedInTotal, notLoggedInTotal } = useAuth();
+  const { user, addScoreToDb } = useAuth();
 
   //Grabs questions from firebase realtime database
   useEffect(() => {
     let database = firebase.database();
-    database.ref().on('value', (snapshot) => {
-      setQuestions(snapshot.val());
-    })
+    database.ref().on('value', (snapshot) => { 
+       setQuestions(snapshot.val());
+    }) 
   }, []);
 
   const handleFinish = async () => {
@@ -30,15 +30,12 @@ const Questionnaire = () => {
       total += score[key];
     }
 
-    if(user) {
-      try {
-        await addScoreToDb(user.uid, total, new Date());
-      } catch (e) {
-        console.log(e);
-      }
+    try {
+      await addScoreToDb(user.uid, total, new Date());
+    } catch (e) {
+      console.log(e);
     }
     history.push(`/success/${total}`);
-    setNotLoggedInTotal(total)
   };
 
   const handleSelect = (selectedIndex, e) => {
@@ -57,51 +54,51 @@ const Questionnaire = () => {
   };
 
   const htmlOfItems = questions.map((question, i) => {
-    return (
-        <Carousel.Item key={i}>
-          <h2 className='question-title'>{question.ques}</h2>
-          {buildAnswers(question, i, score, setScore)}
-        </Carousel.Item>
+    return (      
+      <Carousel.Item key={i}>
+        <h2 className='question-title'>{question.ques}</h2>
+        {buildAnswers(question, i, score, setScore)}
+      </Carousel.Item>
     );
   });
 
   return (
-      <div>
-        <div className='container-fluid'>
-          <div className='row questionnaire-row'>
-            <div className='col-lg-6 questionnaire-left'>
-              <TipsContainer index={index} />
-            </div>
-            <div className='col-lg-6 px-md-5 questionnaire-right'>
-              <h2 className='questionnaire-step-counter'>
-                Question {index + 1} of 15
-              </h2>
-              <Carousel
-                  activeIndex={index}
-                  onSelect={handleSelect}
-                  interval={null}
-                  nextIcon={
-                    <div className='py-3 px-5 btn btn-primary next'>
-                      {index === 14 ? 'Submit' : 'Next'}
-                    </div>
-                  }
-                  prevIcon={
-                    index === 0 ? (
-                        ''
-                    ) : (
-                        <div className='py-3 px-5 btn btn-primary prev'>Back</div>
-                    )
-                  }
-                  bsPrefix='c-carousel'
-                  indicators={true}
-                  style={{ minHeight: 500 + 'px' }}
-              >
-                {htmlOfItems}
-              </Carousel>
-            </div>
+    <div>
+      <div className='container-fluid'>
+        <div className='row questionnaire-row'>
+          <div className='col-lg-6 questionnaire-left'>
+            <TipsContainer index={index} />
+          </div>
+          <div className='col-lg-6 px-md-5 questionnaire-right'>
+            <h2 className='questionnaire-step-counter'>
+              Question {index + 1} of 15
+            </h2>
+            <Carousel
+              activeIndex={index}
+              onSelect={handleSelect}
+              interval={null}
+              nextIcon={
+                <div className='py-3 px-5 btn btn-primary next'>
+                  {index === 14 ? 'Submit' : 'Next'}
+                </div>
+              }
+              prevIcon={
+                index === 0 ? (
+                  ''
+                ) : (
+                  <div className='py-3 px-5 btn btn-primary prev'>Back</div>
+                )
+              }
+              bsPrefix='c-carousel'
+              indicators={true}
+              style={{ minHeight: 500 + 'px' }}
+            >
+              {htmlOfItems}
+            </Carousel>
           </div>
         </div>
       </div>
+    </div>
   );
 };
 

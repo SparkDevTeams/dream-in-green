@@ -14,45 +14,42 @@ import Questionnaire from './pages/Questionnaire';
 
 const NoMatchPage = () => {
   return (
-      <div
-          style={{ textAlign: 'center', minHeight: 'calc(100vh - 87px - 127px)' }}
-      >
-        <h3 style={{ paddingTop: '3rem' }}>404 - Not found</h3>
-      </div>
+    <div
+      style={{ textAlign: 'center', minHeight: 'calc(100vh - 87px - 127px)' }}
+    >
+      <h3 style={{ paddingTop: '3rem' }}>404 - Not found</h3>
+    </div>
   );
 };
 
 const App = () => {
   return (
-      <UserProvider>
-        <Router>
-          <NavBar />
-          <Switch>
-            <Route exact path='/'>
-              <Home />
-            </Route>
-            <Route path='/log-in'>
-              <LogIn />
-            </Route>
-            <Route path='/sign-up'>
-              <SignUp />
-            </Route>
-            <Route path='/welcome-questionnaire'>
-              <Questionnaire/>
-            </Route>
-            <AuthRoute path='/questionnaire' component={Questionnaire} />
-            <Route path='/learn'>
-              <Learn />
-            </Route>
-            <Route path='/success/:score'>
-              <SuccessPage />
-            </Route>
-            <AuthRoute path='/profile' component={Profile} />
-            <Route component={NoMatchPage} />
-          </Switch>
-          <Footer />
-        </Router>
-      </UserProvider>
+    <UserProvider>
+      <Router>
+        <NavBar />
+        <Switch>
+          <Route exact path='/'>
+            <Home />
+          </Route>
+          <Route path='/log-in'>
+            <LogIn />
+          </Route>
+          <Route path='/sign-up'>
+            <SignUp />
+          </Route>
+          <AuthRoute path='/questionnaire' component={Questionnaire} />
+          <Route path='/learn'>
+            <Learn />
+          </Route>
+          <Route path='/success/:score'>
+            <SuccessPage />
+          </Route>
+          <AuthRoute path='/profile' component={Profile} />
+          <Route component={NoMatchPage} />
+        </Switch>
+        <Footer />
+      </Router>
+    </UserProvider>
   );
 };
 

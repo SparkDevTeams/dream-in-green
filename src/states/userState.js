@@ -30,11 +30,6 @@ export function UserProvider({ children }) {
   //otherwise we render the log-in/sign-up page
   const [loading, setLoading] = useState(true);
 
-  //this state is used so that when a user that it's not logged in takes a quiz, the app will be able to route
-  //accordingly without losing score to be able to save it to profile after user either logs in or creates account
-  const [tookQuizNotLoggedIn, setTookQuizNotLoggedIn] = useState(false)
-  //quiz total score for user that is not logged in
-  const [notLoggedInTotal, setNotLoggedInTotal] = useState(0);
 
   //sign up through firebase api
   function signup(email, password) {
@@ -43,18 +38,18 @@ export function UserProvider({ children }) {
 
   function registerUser(uid, firstName, lastName, school) {
     usersCollection
-        .doc(uid)
-        .set({
-          firstName,
-          lastName,
-          school,
-        })
-        .then(function () {
-          console.log('Document successfully written!');
-        })
-        .catch(function (error) {
-          console.error('Error writing document: ', error);
-        });
+      .doc(uid)
+      .set({
+        firstName,
+        lastName,
+        school,
+      })
+      .then(function () {
+        console.log('Document successfully written!');
+      })
+      .catch(function (error) {
+        console.error('Error writing document: ', error);
+      });
   }
 
   function addScoreToDb(uid, score, createdAt) {
@@ -70,53 +65,53 @@ export function UserProvider({ children }) {
 
   const [profilePic, setProfilePic] = useState(defaultProfileImage);
 
-  //Uploads the file to the firebase
-  const uploadProfilePic = (file) => {
-    //Forces the image to be saved as a jpeg in firebase
-    const cacheControl = {
-      contentType: 'image/jpeg',
-      customMetadata: {
-        userId: user.uid
-      }
+ //Uploads the file to the firebase 
+ const uploadProfilePic = (file) => {
+  //Forces the image to be saved as a jpeg in firebase
+  const cacheControl = {
+    contentType: 'image/jpeg',
+    customMetadata: {
+      userId: user.uid
     }
+  }   
 
-    const imageFile = file.target.files[0];
-    const options = {
-      maxSizeMB: 0.1,
-      maxWidthOrHeight: 1080,
-      useWebWorker: true
-
-    }
-    console.log('hittt');
-    /*
-      The first parameter is the image we are compressing and the second parameter are the settings we chose for compressing the image
-      The ref() parameter is what we are setting the path of the users profile picture in our firebase bucket
-    */
-    imageCompression(imageFile, options).then( (compressedFile) => {
-      firebase.storage().ref('users/'+ user.uid + '/profile.jpg').put(compressedFile, cacheControl).then( () => {
-        console.log("Successfully uploaded image")
-      }).catch(error => {
-        console.log("Error uploading image: " + error);
-      });
-    })
-
-    //Sets the profilePic state to the local file the first time it's uploaded. Everytime after that it will be fetched from firebase with the downloadProfilePic() method
-    setProfilePic(URL.createObjectURL(imageFile));
+  const imageFile = file.target.files[0];
+  const options = {
+    maxSizeMB: 0.1,
+    maxWidthOrHeight: 1080,
+    useWebWorker: true
+    
   }
+  console.log('hittt');
+  /*
+    The first parameter is the image we are compressing and the second parameter are the settings we chose for compressing the image
+    The ref() parameter is what we are setting the path of the users profile picture in our firebase bucket
+  */
+  imageCompression(imageFile, options).then( (compressedFile) => {
+    firebase.storage().ref('users/'+ user.uid + '/profile.jpg').put(compressedFile, cacheControl).then( () => {
+      console.log("Successfully uploaded image")
+    }).catch(error => {
+      console.log("Error uploading image: " + error);
+    });
+  })
+  
+  //Sets the profilePic state to the local file the first time it's uploaded. Everytime after that it will be fetched from firebase with the downloadProfilePic() method
+  setProfilePic(URL.createObjectURL(imageFile));
+}
 
   const downloadProfilePic = (user) => {
     firebase.storage().ref('users/'+ user.uid + '/profile.jpg').getDownloadURL()
-        .then(imgURL => {
-          console.log("successfully downloaded profile picture");
-          setProfilePic(imgURL);
-        }).catch(error => {
+    .then(imgURL => {
+      console.log("successfully downloaded profile picture");
+      setProfilePic(imgURL);
+    }).catch(error => {
       console.log('error img ' + error);
       setProfilePic(defaultProfileImage);
     })
   }
 
   /* firebase api has its own listener for when the user has signed in or not
-  we only want to do this once when the sign in page is mounted, once it is
+  we only want to do this once when the sign in page is mounted, once it is 
   un mounted there is no more need for the listener */
   useEffect(() => {
     const unsub = auth.onAuthStateChanged((user) => {
@@ -148,15 +143,11 @@ export function UserProvider({ children }) {
     registerUser,
     addScoreToDb,
     uploadProfilePic,
-    tookQuizNotLoggedIn,
-    setTookQuizNotLoggedIn,
-    notLoggedInTotal,
-    setNotLoggedInTotal
   };
 
   return (
-      <userContext.Provider value={defaultValue}>
-        {!loading && children}
-      </userContext.Provider>
+    <userContext.Provider value={defaultValue}>
+      {!loading && children}
+    </userContext.Provider>
   );
 }
