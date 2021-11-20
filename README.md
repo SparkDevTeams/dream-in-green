@@ -1,5 +1,5 @@
 # Fall-2021-DIG
- Live Demo: [https://spring2021-dream-in-green.netlify.app/](https://spring2021-dream-in-green.netlify.app/)
+ Live Demo: [https://dreamingreen.netlify.app/](https://dreamingreen.netlify.app/)
 
 Fall 2021 Dream In Green Project
 
@@ -22,6 +22,6 @@ Builds the app for production.
 - [Netlify](https://www.netlify.com/)
 - [emailJS](https://www.emailjs.com/)
 - [browser-image-compression](https://www.npmjs.com/package/browser-image-compression)
-- [react-chartjs-2] (https://www.npmjs.com/package/react-chartjs-2)
+- [react-chartjs-2](https://www.npmjs.com/package/react-chartjs-2)
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
